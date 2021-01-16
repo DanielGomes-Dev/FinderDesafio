@@ -1,0 +1,22 @@
+{
+  "name": "finderup",
+  "version": "1.0.0",
+  "description": "Desafio FinderUp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js",
+    "install": "npx sequelize db:migrate:undo:all && npx sequelize db:migrate"
+  },
+  "author": "Daniel Gomes",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "sequelize": "^6.3.5",
+    "sqlite3": "^5.0.1"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.2.0"
+  }
+}
