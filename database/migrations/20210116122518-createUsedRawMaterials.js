@@ -11,21 +11,24 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true
       },
-      usedQuantity: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
       name: {
         type: Sequelize.STRING,
         allowNull: false,
 
       },
+      usedQuantity: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
       user: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true
       },
       createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      updatedAt: {
         type: Sequelize.DATE,
         allowNull: false
       }

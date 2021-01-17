@@ -5,7 +5,7 @@ const rawMaretialConnect = new Sequelize(databaseConfig);
 
 const usedRawMaterial = rawMaretialConnect.define('usedRawMaterial', {
     name: Sequelize.STRING,
-    quantity: Sequelize.INTEGER,
+    usedQuantity: Sequelize.INTEGER,
     user: Sequelize.STRING
 });
 
