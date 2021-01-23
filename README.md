@@ -90,6 +90,7 @@ Another thing to notice is API response `status` codes, as a rule of thumb:
 |200|Success|Retrieved list of raw materials|
 |201|Created|raw material was created|
 |400|Bad request|Invalid entry from raw materials|
+|404|Not found|raw materials not found|
 |500|Error|Exception happened on server|
 
 
