@@ -4,7 +4,7 @@ const usedRawMaterial = require('../models/usedRawMaterialsModel');
 module.exports = {
     async index(req, res) {
 
-        const { name, user } = req.query;
+        const { name } = req.query;
 
         try {
             const allRawMaterials = await rawMaterial.findAll({
@@ -13,19 +13,6 @@ module.exports = {
             });
 
             if (name) return res.json(allRawMaterials.filter(material => material.name.toLowerCase().includes(name.toLowerCase())));
-
-            if (user) {
-                const logs = await usedRawMaterial.findAll({
-                    where: {
-                        user
-                    },
-                    attributes: ['name', 'usedQuantity', 'user', 'createdAt']
-                    ,
-                    order: [['createdAt', 'Desc']]
-
-                })
-                return res.json(logs)
-            };
 
             return res.json(allRawMaterials);
 
@@ -37,16 +24,37 @@ module.exports = {
     },
 
     async create(req, res) {
-        const { name, quantity } = req.body;
+        const { name } = req.body;
+        const quantity = Number(req.body.quantity);
 
-        if (!name || !quantity) return res.json({ err: 'the fields, name and quantity are required' });
-        if (typeof (name) !== 'string') return res.json({ err: 'the field, name must be a string' });
-        if (!Number.isInteger(quantity)) return res.json({ err: 'the field, quantity must be a integer' });
-        if (quantity < 1) return res.json({ err: 'the field, quantity must be greater than zero' });
+
+        if (!name || !quantity) return res.status(400).json({ err: 'the fields, name and quantity are required' });
+        if (typeof (name) !== 'string') return res.status(400).json({ err: 'the field, name must be a string' });
+        if (!Number.isInteger(quantity)) return res.status(400).json({ err: 'the field, quantity must be a integer' });
+        if (quantity < 1) return res.status(400).json({ err: 'the field, quantity must be greater than zero' });
+
+        const material = await rawMaterial.findOne({
+            where: {
+                name
+            }
+        })
+
+        if (material) {
+            material.quantity += quantity;
+            await rawMaterial.update({
+                quantity: material.quantity
+            }, {
+                where: {
+                    id: material.id
+                },
+
+            })
+            return res.json(material);
+        }
 
         try {
             const savedRawMaterial = await rawMaterial.create({ name, quantity });
-            return res.json(savedRawMaterial);
+            return res.status(201).json(savedRawMaterial);
 
         } catch (err) {
             // console.log(err);
@@ -56,12 +64,11 @@ module.exports = {
 
     async update(req, res) {
 
-        let { id } = req.params;
-
-        const { quantity, user } = req.body
+        const id = Number(req.params.id);
+        const quantity = Number(req.body.quantity);
+        const { user } = req.body
 
         if (!user || !quantity || !id) return res.status(400).json({ err: 'the fields, id, user and quantity are required' });
-        id = Number(id);
         if (!Number.isInteger(id)) return res.status(400).json({ err: 'the field, id must be a integer' });
         if (!Number.isInteger(quantity)) return res.status(400).json({ err: 'the field, quantity must be a integer' });
         if (typeof (user) !== 'string') return res.status(400).json({ err: 'the field, user must be a string' });
@@ -98,6 +105,24 @@ module.exports = {
             console.log(err);
             return res.status(500).json({});
         }
+
+    },
+    async delete(req, res) {
+
+        const id = Number(req.params.id);
+        if (!Number.isInteger(id)) return res.status(400).json({ err: 'Bad Format ID' });
+
+        try {
+            const deleteMaterial = await rawMaterial.findByPk(id);
+            if (!deleteMaterial) return res.status(404).json({ err: 'raw material not found' });
+            const response = await deleteMaterial.destroy();
+            return res.status(200).json(response);
+
+        } catch (err) {
+            console.log(err);
+            return res.status(500);
+        }
+
 
     }
 }

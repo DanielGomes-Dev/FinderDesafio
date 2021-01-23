@@ -1,11 +1,15 @@
+require('dotenv').config();
+
 'use strict';
 
 const seed = () => {
+
   const ingredientes = ['Ovo', 'Manteiga', 'Farinha de Trigo', 'Chocolate', 'Açúcar'];
   const seed = [];
-  for (let i = 0; i < 50; ++i) {
+
+  for (let i in ingredientes) {
     seed.push({
-      name: ingredientes[Math.floor(Math.random() * ingredientes.length)],
+      name: ingredientes[i],
       quantity: Math.floor(Math.random() * 100),
     })
   }
@@ -14,8 +18,6 @@ const seed = () => {
 
   return seed;
 }
-
-
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {

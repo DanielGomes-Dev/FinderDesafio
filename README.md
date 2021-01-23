@@ -32,7 +32,14 @@ $ npm i
 ```
 
 ```bash
-$ npm run install
+$ npm run installApp
+```
+### Testing
+
+Runing Tests
+
+```bash
+$ npm run test
 ```
 
 ### Running
@@ -81,6 +88,7 @@ Another thing to notice is API response `status` codes, as a rule of thumb:
 |Status|Description|Example|
 | ------ | ------ | ----- |
 |200|Success|Retrieved list of raw materials|
+|201|Created|raw material was created|
 |400|Bad request|Invalid entry from raw materials|
 |500|Error|Exception happened on server|
 
@@ -195,7 +203,6 @@ The REST API to the example app is described below.
 `PUT /rawMaterials/:id/request`
 
     curl -i -X PUT -H "Content-Type: application/json" -d '{"user":"user","quantity":"five"}' http://localhost:3333/rawMaterials/1/request
-    curl -i -X PUT -H "Content-Type: application/json" -d '{"user":"user","quantity":1}' http://localhost:3333/rawMaterials/1/request
 
 
 ### Response
